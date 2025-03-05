@@ -8,7 +8,9 @@ const Login = () => {
   const navigate = useNavigate()
   const {loginAuth} = useAuth()
   const {login,isAuthenticated ,user} = auth()
+  const [isLoading,setIsLoading] = useState(false)
   const onSubmit = async(data) => {
+    setIsLoading(true)
     try {
         const response = await fetch("http://127.0.0.1:8000/api/user/login", {
           method: "POST",
@@ -31,6 +33,8 @@ const Login = () => {
         }
       } catch (error) {
         console.error("Error during login:", error);
+      }finally{
+        setIsLoading(false)
       }
     };
  
@@ -95,9 +99,16 @@ const Login = () => {
         <div className="flex justify-center">
           <button
             type="submit"
+            disabled={isLoading}
             className="w-full bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition-all duration-300 font-semibold shadow-lg"
           >
-            Login
+            {isLoading ? (
+                <div className="flex justify-center items-center">
+                  <div className="w-5 h-5 border-4 border-t-transparent border-blue-500 rounded-full animate-spin"></div>
+                </div>
+              ) : (
+                "Login"
+              )}
           </button>
         </div>
       </form>
