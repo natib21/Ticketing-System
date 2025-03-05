@@ -5,10 +5,11 @@ import useAuth from "../hook/useAuth";
 const SignUp = () => {
   const { register, handleSubmit,watch, formState: { errors } } = useForm();
   const [success, setSuccess] = useState(false);
-
+  const [isLoading,setIsLoading] = useState(false)
   const navigate = useNavigate()
   const onSubmit = async (data) => {
     console.log(data)
+    setIsLoading(true)
     try {
         const response = await fetch("http://127.0.0.1:8000/api/user/signUp", {
           method: "POST",
@@ -30,6 +31,8 @@ const SignUp = () => {
         }
       } catch (error) {
         console.error("Error during login:", error);
+      }finally{
+        setIsLoading(false)
       }
     };
     
@@ -126,9 +129,16 @@ const SignUp = () => {
         <div className="flex justify-center">
           <button
             type="submit"
+            disabled={isLoading}
             className="w-full bg-white/20 text-white py-3 rounded-md hover:bg-white/30 transition duration-300 shadow-lg hover:shadow-xl backdrop-blur-md"
           >
-            Sign Up
+             {isLoading ? (
+                <div className="flex justify-center items-center">
+                  <div className="w-5 h-5 border-4 border-t-transparent border-blue-500 rounded-full animate-spin"></div>
+                </div>
+              ) : (
+                "Sign Up"
+              )}
           </button>
         </div>
       </form>
